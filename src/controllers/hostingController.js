@@ -2,53 +2,59 @@ const hosting = require("../models/hosting")
 const {request, response} = require("express")
 const e = require("express")
 
+/*Mostra todas as hospedagens por estado*/
+const getByCity = async(request, response) =>{
+    try{
+        let hostingFromCity = await hosting.find({city: request.params.city})
+        if(hostingFromCity) {
+            response.status(200).json(hostingFromCity).send({message: "Aqui estão as opções de hospedagens acessíveis nessa cidade"})
+        }else {
+            response.status(400).send({ message: "Infelizmente, ainda não foram cadastradas hospedagens nessa cidade!"})
+        }
+    }catch (error) {
+        response.status(400).send({ message: error.message})
+    }    
+} 
 
-/* Mostrar todas as hospedagens por estado */
+/*Mostra todas as hospedagens por cidade*/
 const getByState = async(request, response) => {
 
-    try{
-        hosting.find({state: request.params.state})
-        .then(hostingFound =>{
-            response.status(200).send({message: "Nesse estado, essas são as opções de hospedagens com acessibilidade: "
-            , hostingFound})
-        }).catch(e =>{
-            response.status(400).send({message: "Infelizmente, ainda não foram cadastradas hospedagens nesse estado!"})
-        })
-    }catch (error){
-        response.status(400).send({message: error.message})
-    }
-
-    /*try {
+    try {
+        console.log(request.params)
         let hostingFromState = await hosting.find({state: request.params.state});
         if(hostingFromState) {
-            response.status(200).send(hostingFromState);
+            response.status(200).send({message: "Aqui estão as opções de hospedagens acessíveis nesse estado", hostingFromState});
         }else {
             response.status(400).send({ message: "State not found!" })
         }
-
-    
     } catch (error) {
         response.status(400).send({ message: error.message})
-    }*/
-    
+    }
 }
 
-const getByCity = async(request, response) =>{
-    try{
-        hosting.find({city: request.params.city})
-        .then(hostingFound =>{
-            response.status(200).send({message: "Nessa cidade, essas são as opções de hospedagem com acessibilidade: "
-        , hostingFound})
-        }).catch(e =>{
-            response.status(400).send({message: "Infelizmente, ainda não foram cadastradas hospedagens nessa cidade!"})
-        })
-    }catch (error){
-        response.status(400).send({message: error.message})
-    }
+const createHosting = (request, response) =>{
+    let {name, state, city, phone, accessibility, address, site} = request.body
     
-} 
+    const newHosting = new hosting({
+        name: name,
+        state: state,
+        city: city,
+        phone: phone,
+        accessibility: accessibility,
+        address: address,
+        site: site  
+    });
+    newHosting.save()
+    .then((res) => {
+        response.status(201).json({message: "Hospedagem adicionada ao banco de dados! o/"})
+    })
+    .catch(err => next(err));
+
+}
 
 module.exports = {
+    getByCity,
     getByState,
-    getByCity
+    createHosting
 }
+
