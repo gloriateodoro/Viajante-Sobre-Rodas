@@ -12,4 +12,3 @@ router.get("/city/:city", controller.getByCity) //quando era Id passado pelo pos
 router.post("/createhosting", controller.createHosting)
 
 module.exports = router
-
