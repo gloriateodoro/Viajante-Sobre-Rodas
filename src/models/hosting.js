@@ -1,11 +1,17 @@
 const mongoose = require('mongoose')
+
 const Schema = mongoose.Schema
 
 const hostingSchema = new Schema({
-    nome: {type: String, required: true},
-    estado: {type: String, required: true},
-    telefone: {type: String, required: false},
-    acessibilidade: {type: Array, required: true},
-    endereço: {type: Object, required: true},
-    site: {type: String, required: false}    
+    name: {type: String, required: true},
+    state: {type: String, required: true},
+    city: {type:String, required: true},
+    phone: {type: String},
+    accessibility: {type: Array, required: true},
+    address: {type: Object, required: true},
+    site: {type: String}    
 })
+
+const hosting = mongoose.model('Hosting', hostingSchema)
+
+module.exports = hosting
