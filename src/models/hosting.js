@@ -7,11 +7,11 @@ const hostingSchema = new Schema({
     state: {type: String, required: true},
     city: {type:String, required: true},
     phone: {type: String},
-    accessibility: {type: Array, required: true},
+    accessibility: {type: Object, required: true},
     address: {type: Object, required: true},
     site: {type: String}    
 })
 
-const hosting = mongoose.model('Hosting', hostingSchema)
+const Hosting = mongoose.model('Hosting', hostingSchema)
 
-module.exports = hosting
+module.exports = Hosting
